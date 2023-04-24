@@ -1,11 +1,17 @@
-* Vim-OrgMode
+* Vim-AbuOrgMode
 
   #+ATTR_HTML: title="Join the chat at https://gitter.im/jceb/vim-orgmode"
   [[https://gitter.im/jceb/vim-orgmode?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge][file:https://badges.gitter.im/jceb/vim-orgmode.svg]]
   [[https://travis-ci.org/jceb/vim-orgmode][file:https://travis-ci.org/jceb/vim-orgmode.svg]]
   [[https://codecov.io/gh/jceb/vim-orgmode][file:https://codecov.io/gh/jceb/vim-orgmode/branch/master/graph/badge.svg]]
 
-  Text outlining and task management for Vim based on [[http://orgmode.org/][Emacs' Org-Mode]].
+
+  Text outlining and task management for Vim based on
+  [[http://orgmode.org/][Emacs' Org-Mode]]. Forked from the great work made
+  in [[https://github.com/jceb/vim-orgmode][the jceb repo]]. This fork is a
+  layer of several updates, like the pandoc integration for document export,
+  the diary/journal implementation and some updates to some of the optis,
+  like another approach to the tagbar integration
 
   The idea for this plugin was born by listening to the
   [[http://twit.tv/floss136][Floss Weekly podcast]] introducing Emacs Org-Mode.
@@ -31,10 +37,15 @@
    - Tags for headings
    - Lists in alphanumeric and bullet item notation and checkbox support
    - Basic date handling
-   - Export to other formats (via Emacs' Org-Mode)
+*** What's new?
+   - Export to other formats (via Emacs' Org-Mode or *via pandoc*)
+   - *Basic Journal implementation.*
 
 * Installation and Usage
-  Installation and usage instructions are found in the file [[doc/orgguide.txt][doc/orgguide.txt]].
+  Installation and usage instructions are found in the file
+  [[doc/orgguide.txt][doc/orgguide.txt]] and some relevant info also is
+  aviable in the
+  [[https://github.com/awelormro/vim-abuorgmode/wiki][wiki]].
 
 * License
   Information about the license is found in file [[LICENSE]].
