@@ -47,6 +47,12 @@
   aviable in the
   [[https://github.com/awelormro/vim-abuorgmode/wiki][wiki]].
 
+* Roadmap
+  - [ ] Add orgroam features
+  - [ ] Add presentation tools
+  - [ ] Expand diary and agenda files
+  - [ ] Update completion settings
+
 * License
   Information about the license is found in file [[LICENSE]].
 
