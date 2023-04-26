@@ -1,3 +1,4 @@
+" vim: set fdm=marker:
 " org.vim -- Text outlining and task management for Vim based on Emacs' Org-Mode
 " @Author       : Jan Christoph Ebersbach (jceb@e-jc.de)
 " @License      : AGPL3 (see http://www.gnu.org/licenses/agpl.txt)
@@ -6,6 +7,7 @@
 " @Revision     : 0.4
 " vi: ft=vim:tw=80:sw=4:ts=4:fdm=marker
 
+" check python version {{{1
 if v:version > 702
 	if has('python3')
 		let s:py_version = 'python3 '
