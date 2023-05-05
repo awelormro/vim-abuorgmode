@@ -43,7 +43,7 @@ function! Tail(list)
   return a:list[1:]
 endfunction
 
-command! -nargs=* -complete=customlist,CompleteFormat ConvertToFormat call ConvertToFormat(<q-args>)
+command! -nargs=* -complete=customlist,CompleteFormat OrgConvertToFormat call ConvertToFormat(<q-args>)
 " Reassign ctags incorporation {{{1
 " let g:tagbar_type_org = {
 "       \   'ctagstype':'org'
