@@ -57,7 +57,7 @@ command! -nargs=* -complete=customlist,CompleteFormat OrgConvertToFormat call Co
 
 " Diary creation {{{1
 
-function! OpenJournal()
+function! OrgOpenJournal()
   let filename = strftime('%Y-%m-%d') . '.org'
   let filepath = g:orgmode_journal_path . filename
   execute 'edit ' . filepath

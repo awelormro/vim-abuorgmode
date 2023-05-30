@@ -384,6 +384,11 @@ if exists('g:loaded_SyntaxRange')
   call SyntaxRange#Include('#+BEGIN_SRC rust', '#+END_SRC', 'rust', 'comment')
   call SyntaxRange#Include('#+BEGIN_SRC lua', '#+END_SRC', 'lua', 'comment')
   call SyntaxRange#Include('#+BEGIN_SRC lisp', '#+END_SRC', 'lisp', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC html', '#+END_SRC', 'html', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC css', '#+END_SRC', 'css', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC java', '#+END_SRC', 'java', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC javascript', '#+END_SRC', 'javascript', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC bash', '#+END_SRC', 'bash', 'comment')
 
   " LaTeX
   call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex')

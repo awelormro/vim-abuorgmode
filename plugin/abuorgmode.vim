@@ -43,11 +43,11 @@ endf
 
 
 
-let mystring = "Hello World"
+" let mystring = 'Hello World'
 
 " Eliminar el primer y el último carácter de la cadena
-let mystring = strpart(mystring, 1, len(mystring) - 2)
+" let mystring = strpart(mystring, 1, len(mystring) - 2)
 
-echo mystring
+" echo mystring
 
-echo 1
+" echo 1
