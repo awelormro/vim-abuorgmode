@@ -124,8 +124,26 @@ ORGMODE.start()
 
 from Date import Date
 import datetime
+
+
+def recopilar_lineas_effort():
+    lineas_effort = []
+    for num_linea, linea in enumerate(vim.current.buffer, start=1):
+        if linea.startswith(':EFFORT:'):
+            lineas_effort.append((num_linea, linea))
+    return lineas_effort
+
+lineas_effort = recopilar_lineas_effort()
+
+for num_linea, linea in lineas_effort:
+    print(f"Línea {num_linea}: {linea}")
 EOF
 
+function! InvokeRecopilarEffort()
+  let python_script = "python3 recopilar_effort()"
+  let output = system(python_script)
+  echo output
+endfunction
 " 3rd Party Plugin Integration {{{1
 " * Repeat {{{2
 try

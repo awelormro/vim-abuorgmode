@@ -176,6 +176,8 @@ def indent_orgmode():
     :returns: None
     """
     line = int(vim.eval(u_encode(u'v:lnum')))
+    prevline= int(vim.eval(u_encode(u'line(".")')))
+    contprevline=vim.eval(u_encode(u'getline(".")'))
     d = ORGMODE.get_document()
     heading = d.current_heading(line - 1)
     if heading and line != heading.start_vim:
@@ -187,8 +189,12 @@ def indent_orgmode():
                 # indent body up to the beginning of the checkbox' text
                 # if checkbox isn't indented to the proper location, the body
                 # won't be indented either
-                level = checkbox.level + len(checkbox.type) + 1 + \
-                        (4 if checkbox.status else 0)
+                if contprevline.strip() == "" or contprevline.isspace():
+                    level = checkbox.level + len(checkbox.type)  - 5 + \
+                            (4 if checkbox.status else 0)
+                else:
+                    level = checkbox.level + len(checkbox.type) + 1 + \
+                            (4 if checkbox.status else 0)
         vim.command(u_encode((u'let b:indent_level = %d' % level)))
 
 
@@ -223,13 +229,12 @@ def fold_text(allow_dirty=False):
 
 
 def fold_orgmode(allow_dirty=False):
-    u""" Set the fold expression/value for the current line in the variable
+    """
+    Set the fold expression/value for the current line in the variable
     b:fold_expr
-
     Vim prerequisites:
         :setlocal foldmethod=expr
         :setlocal foldexpr=Method-which-calls-fold_orgmode
-
     :allow_dirty:    Perform a query without (re)building the DOM if True
     :returns: None
     """

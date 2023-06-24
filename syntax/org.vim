@@ -1,3 +1,5 @@
+" vim: set fdm=marker:
+"
 " Support org authoring markup as closely as possible
 " (we're adding two markdown-like variants for =code= and blockquotes)
 " -----------------------------------------------------------------------------
@@ -313,7 +315,7 @@ hi def link org_list_unordered Identifier
 syntax match org_list_def /.*\s\+::/ contained
 hi def link org_list_def PreProc
 
-syntax match org_list_item /.*$/ contained contains=org_subtask_percent,org_subtask_number,org_subtask_percent_100,org_subtask_number_all,org_list_checkbox,org_bold,org_italic,org_underline,org_code,org_verbatim,org_timestamp,org_timestamp_inactive,org_list_def
+syntax match org_list_item /.*$/ contained contains=org_subtask_percent,org_subtask_number,org_subtask_percent_100,org_subtask_number_all,org_list_checkbox,org_bold,org_italic,org_underline,org_code,org_verbatim,org_timestamp,org_timestamp_inactive,org_list_def,texDelimiter
 syntax match org_list_checkbox /\[[ X-]]/ contained
 hi def link org_list_bullet Identifier
 hi def link org_list_checkbox     PreProc
@@ -390,11 +392,20 @@ if exists('g:loaded_SyntaxRange')
   call SyntaxRange#Include('#+BEGIN_SRC javascript', '#+END_SRC', 'javascript', 'comment')
   call SyntaxRange#Include('#+BEGIN_SRC bash', '#+END_SRC', 'bash', 'comment')
 
+  let g:org_latex_disabled     = get(g:, 'org_tex_disabled', 0)
   " LaTeX
-  call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex')
-  call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex')
-  call SyntaxRange#Include('\\\[', '\\\]', 'tex')
-  call SyntaxRange#Include('\$[^$]', '\$', 'tex')
+  " if g:org_latex_disabled==0
+  "     call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex')
+  "     call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex')
+  "     call SyntaxRange#Include('\\\[', '\\\]', 'tex')
+  "     call SyntaxRange#Include('\$[^$]', '\$', 'tex')
+  " endif
 endif
+" LaTeX syntax auxiliar {{{1
 
-" vi: ft=vim:tw=80:sw=4:ts=4:fdm=marker
+syn match texDelimiter		"&"
+syn match texDelimiter		"\\\\"
+syn match texDelimiter    "\\cite"
+hi def link texDelimiter type
+
+" }}}
