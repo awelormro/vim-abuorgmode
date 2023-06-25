@@ -267,6 +267,27 @@ hi def link org_timestamp_inactive Comment
 syn match org_deadline_scheduled /^\s*\(DEADLINE\|SCHEDULED\):/
 hi def link org_deadline_scheduled PreProc
 
+" LaTeX syntax auxiliar {{{1
+
+syn match texDelimiter		"&"
+syn match texDelimiter		"\\\\"
+syn match texDelimiter    "\\cite"
+hi def link texDelimiter type
+
+syn match  texBeginEnd		"\\begin\>\|\\end\>" nextgroup=texBeginEndName
+syn region texBeginEndName		matchgroup=texDelimiter	start="{"		end="}"	contained	nextgroup=texBeginEndModifier	contains=texComment
+syn region texBeginEndModifier	matchgroup=texDelimiter	start="\["		end="]"	contained	contains=texComment,@texMathZones,@NoSpell
+
+
+" Entorno de ecuaciones LaTeX con $$ delimitadores
+syntax region orgLatexEquation start="\\v\%([^\\]\|^\)\@<=\$\$" end="\\v\%([^\\]\|^\)\@=\$\$"
+
+" Entorno de ecuaciones LaTeX con $ delimitadores
+syntax region orgLatexInlineEquation start="\\v\%([^\\]\|^\)\@<=\$" end="\\v\%([^\\]\|^\)\@=\$"
+
+syn match texStatement	"\\[a-zA-Z@]\+"
+hi def link texStatement type
+" }}}
 " Tables: {{{1
 syn match org_table /^\s*|.*/ contains=org_timestamp,org_timestamp_inactive,hyperlink,org_table_separator,org_table_horizontal_line
 syn match org_table_separator /\(^\s*|[-+]\+|\?\||\)/ contained
@@ -315,7 +336,7 @@ hi def link org_list_unordered Identifier
 syntax match org_list_def /.*\s\+::/ contained
 hi def link org_list_def PreProc
 
-syntax match org_list_item /.*$/ contained contains=org_subtask_percent,org_subtask_number,org_subtask_percent_100,org_subtask_number_all,org_list_checkbox,org_bold,org_italic,org_underline,org_code,org_verbatim,org_timestamp,org_timestamp_inactive,org_list_def,texDelimiter
+syntax match org_list_item /.*$/ contained contains=org_subtask_percent,org_subtask_number,org_subtask_percent_100,org_subtask_number_all,org_list_checkbox,org_bold,org_italic,org_underline,org_code,org_verbatim,org_timestamp,org_timestamp_inactive,org_list_def,texDelimiter,orgLatexEquation,orgLatexInlineEquation,texStatement
 syntax match org_list_checkbox /\[[ X-]]/ contained
 hi def link org_list_bullet Identifier
 hi def link org_list_checkbox     PreProc
@@ -394,18 +415,10 @@ if exists('g:loaded_SyntaxRange')
 
   let g:org_latex_disabled     = get(g:, 'org_tex_disabled', 0)
   " LaTeX
-  " if g:org_latex_disabled==0
-  "     call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex')
-  "     call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex')
-  "     call SyntaxRange#Include('\\\[', '\\\]', 'tex')
-  "     call SyntaxRange#Include('\$[^$]', '\$', 'tex')
-  " endif
+   if g:org_latex_disabled==0
+       call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex')
+       call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex')
+       call SyntaxRange#Include('\\\[', '\\\]', 'tex')
+       call SyntaxRange#Include('\$[^$]', '\$', 'tex')
+   endif
 endif
-" LaTeX syntax auxiliar {{{1
-
-syn match texDelimiter		"&"
-syn match texDelimiter		"\\\\"
-syn match texDelimiter    "\\cite"
-hi def link texDelimiter type
-
-" }}}
