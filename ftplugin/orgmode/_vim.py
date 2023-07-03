@@ -176,25 +176,37 @@ def indent_orgmode():
     :returns: None
     """
     line = int(vim.eval(u_encode(u'v:lnum')))
-    prevline= int(vim.eval(u_encode(u'line(".")')))
-    contprevline=vim.eval(u_encode(u'getline(".")'))
+    prevline= line-1
+    indpline= int(vim.eval(u_encode("indent(line('.')-1)")))
+    # print(line)
+    # print(prevline)
+    # print(checkbox)
+    contprevline=vim.eval(u_encode(u'getline(%d)' % prevline))
     d = ORGMODE.get_document()
     heading = d.current_heading(line - 1)
+    print(heading)
     if heading and line != heading.start_vim:
         heading.init_checkboxes()
         checkbox = heading.current_checkbox()
         level = heading.level + 1
+        # print(checkbox)
         if checkbox:
             if line != checkbox.start_vim:
                 # indent body up to the beginning of the checkbox' text
                 # if checkbox isn't indented to the proper location, the body
                 # won't be indented either
-                if contprevline.strip() == "" or contprevline.isspace():
-                    level = checkbox.level + len(checkbox.type)  - 5 + \
-                            (4 if checkbox.status else 0)
-                else:
-                    level = checkbox.level + len(checkbox.type) + 1 + \
-                            (4 if checkbox.status else 0)
+                level = checkbox.level + len(checkbox.type) + 1 + \
+                        (4 if checkbox.status else 0)
+        if contprevline.strip() == "" or contprevline.isspace() or \
+                "- [" not in contprevline:
+            if line.startswith("- "):
+                print('Pendejada aleatoria')
+            if indpline > heading.level+1:
+                level = checkbox.level + len(checkbox.type) + 1 + \
+                        (4 if checkbox.status else 0)
+            else:
+                level=heading.level+1
+                
         vim.command(u_encode((u'let b:indent_level = %d' % level)))
 
 

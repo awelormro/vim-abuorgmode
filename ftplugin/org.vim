@@ -152,15 +152,15 @@ catch
 endtry
 
 " * Tagbar {{{2
-let g:tagbar_type_org = {
-			\ 'ctagstype' : 'org',
-			\ 'kinds'     : [
-				\ 's:sections',
-				\ 'h:hyperlinks',
-			\ ],
-			\ 'sort'    : 0,
-			\ 'deffile' : expand('<sfile>:p:h') . '/org.cnf'
-			\ }
+" let g:tagbar_type_org = {
+" 			\ 'ctagstype' : 'org',
+" 			\ 'kinds'     : [
+" 				\ 's:sections',
+" 				\ 'h:hyperlinks',
+" 			\ ],
+" 			\ 'sort'    : 0,
+" 			\ 'deffile' : expand('<sfile>:p:h') . '/org.cnf'
+" 			\ }
 
 " * Taglist {{{2
 if exists('g:Tlist_Ctags_Cmd')
