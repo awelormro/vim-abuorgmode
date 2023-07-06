@@ -178,18 +178,13 @@ def indent_orgmode():
     line = int(vim.eval(u_encode(u'v:lnum')))
     prevline= line-1
     indpline= int(vim.eval(u_encode("indent(line('.')-1)")))
-    # print(line)
-    # print(prevline)
-    # print(checkbox)
     contprevline=vim.eval(u_encode(u'getline(%d)' % prevline))
     d = ORGMODE.get_document()
     heading = d.current_heading(line - 1)
-    print(heading)
     if heading and line != heading.start_vim:
         heading.init_checkboxes()
         checkbox = heading.current_checkbox()
         level = heading.level + 1
-        # print(checkbox)
         if checkbox:
             if line != checkbox.start_vim:
                 # indent body up to the beginning of the checkbox' text
@@ -197,16 +192,9 @@ def indent_orgmode():
                 # won't be indented either
                 level = checkbox.level + len(checkbox.type) + 1 + \
                         (4 if checkbox.status else 0)
-        if contprevline.strip() == "" or contprevline.isspace() or \
-                "- [" not in contprevline:
-            if line.startswith("- "):
-                print('Pendejada aleatoria')
-            if indpline > heading.level+1:
-                level = checkbox.level + len(checkbox.type) + 1 + \
-                        (4 if checkbox.status else 0)
-            else:
-                level=heading.level+1
-                
+        # Added to can come back to the previous line indentation after a list
+        if not contprevline or contprevline.isspace():
+            level=heading.level+1
         vim.command(u_encode((u'let b:indent_level = %d' % level)))
 
 
