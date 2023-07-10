@@ -76,4 +76,4 @@ function! OrgOpenJournal()
   endif  
 endfunction
 
-command! -nargs=0 Openjournal call OpenJournal()
+command! -nargs=0 Openjournal call OrgOpenJournal()

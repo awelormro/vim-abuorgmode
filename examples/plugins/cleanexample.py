@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
-import process
-import vim
 
 from orgmode import echo, echom, echoe, ORGMODE, apply_count, repeat
 from orgmode.menu import Submenu, Separator, ActionEntry
@@ -38,7 +35,7 @@ class Example(object):
 
         :returns: TODO
         """
-        print('holi')
+        pass
 
     def register(self):
         u"""
@@ -52,4 +49,3 @@ class Example(object):
         self.keybindings.append(Keybinding(u'keybinding',
                 Plug(u'OrgAction', self.commands[-1])))
         self.menu + ActionEntry(u'&Action', self.keybindings[-1])
-
