@@ -174,6 +174,7 @@ def indent_orgmode():
         :setlocal indentexpr=Method-which-calls-indent_orgmode
 
     :returns: None
+    TODO: Need to restructure the indent function to add numbered elements
     """
     line = int(vim.eval(u_encode(u'v:lnum')))
     prevline= line-1
@@ -184,6 +185,11 @@ def indent_orgmode():
     if heading and line != heading.start_vim:
         heading.init_checkboxes()
         checkbox = heading.current_checkbox()
+        if not contprevline or contprevline.isspace():
+            checkbox=""
+            level=heading.level+1
+        if indpline<level:
+            level=heading.level+1
         level = heading.level + 1
         if checkbox:
             if line != checkbox.start_vim:
@@ -193,8 +199,13 @@ def indent_orgmode():
                 level = checkbox.level + len(checkbox.type) + 1 + \
                         (4 if checkbox.status else 0)
         # Added to can come back to the previous line indentation after a list
-        if not contprevline or contprevline.isspace():
-            level=heading.level+1
+        # if not contprevline or contprevline.isspace():
+        #     checkbox=""
+        #     level=heading.level+1
+        # if indentpline<checkbox.level:
+        #     level=heading.level+1
+        print(indpline)
+        # print(checkbox)
         vim.command(u_encode((u'let b:indent_level = %d' % level)))
 
 
