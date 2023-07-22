@@ -185,12 +185,41 @@ def indent_orgmode():
     if heading and line != heading.start_vim:
         heading.init_checkboxes()
         checkbox = heading.current_checkbox()
+        level = heading.level + 1
         if not contprevline or contprevline.isspace():
             checkbox=""
             level=heading.level+1
-        if indpline<level:
-            level=heading.level+1
-        level = heading.level + 1
+        if indpline==heading.level+1:
+            checkbox=""
+            level=indpline
+        # print(contprevline.startswith((heading.level+1)*" "+"-"))
+        print(contprevline[heading.level].isnumeric())
+        syms1=['-','+','*']
+        if contprevline.startswith((heading.level+1)*" "+"-"):
+            print('prevline list init')
+            level=heading.level+3
+        if contprevline[heading.level+1] in syms1:
+            print('prevline list init')
+            level=heading.level+3
+        if contprevline.startswith((heading.level+1)*" "+"-"):
+            print('prevline list init')
+            level=heading.level+3
+            if contprevline.startswith((heading.level+1)*" "+"- ["):
+                print('checkbox start')
+                level=level+4
+        if contprevline[heading.level+1].isnumeric():
+            print('numbered list start')
+            level=heading.level+4
+            seps=['.',')','-',':']
+            if (contprevline[heading.level+2].isnumeric() and
+               contprevline[heading.level+3] in seps):
+                print('extended list')
+                level+=1
+
+        # print(line)
+        # if indpline<level:
+        #     level=heading.level+1
+        # level = heading.level + 1
         if checkbox:
             if line != checkbox.start_vim:
                 # indent body up to the beginning of the checkbox' text
@@ -198,14 +227,6 @@ def indent_orgmode():
                 # won't be indented either
                 level = checkbox.level + len(checkbox.type) + 1 + \
                         (4 if checkbox.status else 0)
-        # Added to can come back to the previous line indentation after a list
-        # if not contprevline or contprevline.isspace():
-        #     checkbox=""
-        #     level=heading.level+1
-        # if indentpline<checkbox.level:
-        #     level=heading.level+1
-        print(indpline)
-        # print(checkbox)
         vim.command(u_encode((u'let b:indent_level = %d' % level)))
 
 
