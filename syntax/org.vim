@@ -269,24 +269,24 @@ hi def link org_deadline_scheduled PreProc
 
 " LaTeX syntax auxiliar {{{1
 
-syn match texDelimiter		"&"
-syn match texDelimiter		"\\\\"
-syn match texDelimiter    "\\cite"
-hi def link texDelimiter type
+" syn match texDelimiter		"&"
+" syn match texDelimiter		"\\\\"
+" syn match texDelimiter    "\\cite"
+" hi def link texDelimiter type
 
-syn match  texBeginEnd		"\\begin\>\|\\end\>" nextgroup=texBeginEndName
-syn region texBeginEndName		matchgroup=texDelimiter	start="{"		end="}"	contained	nextgroup=texBeginEndModifier	contains=texComment
-syn region texBeginEndModifier	matchgroup=texDelimiter	start="\["		end="]"	contained	contains=texComment,@texMathZones,@NoSpell
+" syn match  texBeginEnd		"\\begin\>\|\\end\>" nextgroup=texBeginEndName
+" syn region texBeginEndName		matchgroup=texDelimiter	start="{"		end="}"	contained	nextgroup=texBeginEndModifier	contains=texComment
+" syn region texBeginEndModifier	matchgroup=texDelimiter	start="\["		end="]"	contained	contains=texComment,@texMathZones,@NoSpell
 
 
 " Entorno de ecuaciones LaTeX con $$ delimitadores
-syntax region orgLatexEquation start="\\v\%([^\\]\|^\)\@<=\$\$" end="\\v\%([^\\]\|^\)\@=\$\$"
+" syntax region orgLatexEquation start="\\v\%([^\\]\|^\)\@<=\$\$" end="\\v\%([^\\]\|^\)\@=\$\$"
 
 " Entorno de ecuaciones LaTeX con $ delimitadores
-syntax region orgLatexInlineEquation start="\\v\%([^\\]\|^\)\@<=\$" end="\\v\%([^\\]\|^\)\@=\$"
+" syntax region orgLatexInlineEquation start="\\v\%([^\\]\|^\)\@<=\$" end="\\v\%([^\\]\|^\)\@=\$"
 
-syn match texStatement	"\\[a-zA-Z@]\+"
-hi def link texStatement type
+" syn match texStatement	"\\[a-zA-Z@]\+"
+" hi def link texStatement type
 " }}}
 " Tables: {{{1
 syn match org_table /^\s*|.*/ contains=org_timestamp,org_timestamp_inactive,hyperlink,org_table_separator,org_table_horizontal_line
@@ -336,7 +336,8 @@ hi def link org_list_unordered Identifier
 syntax match org_list_def /.*\s\+::/ contained
 hi def link org_list_def PreProc
 
-syntax match org_list_item /.*$/ contained contains=org_subtask_percent,org_subtask_number,org_subtask_percent_100,org_subtask_number_all,org_list_checkbox,org_bold,org_italic,org_underline,org_code,org_verbatim,org_timestamp,org_timestamp_inactive,org_list_def,texDelimiter,orgLatexEquation,orgLatexInlineEquation,texStatement
+syntax match org_list_item /.*$/ contained contains=org_subtask_percent,org_subtask_number,org_subtask_percent_100,org_subtask_number_all,org_list_checkbox,org_bold,org_italic,org_underline,org_code,org_verbatim,org_timestamp,org_timestamp_inactive,org_list_def,
+" texDelimiter,orgLatexEquation,orgLatexInlineEquation,texStatement
 syntax match org_list_checkbox /\[[ X-]]/ contained
 hi def link org_list_bullet Identifier
 hi def link org_list_checkbox     PreProc
@@ -395,30 +396,41 @@ hi def link org_subtask_number_all Identifier
 " https://github.com/vim-scripts/SyntaxRange
 
 " BEGIN_SRC
-if exists('g:loaded_SyntaxRange')
-  call SyntaxRange#Include('#+BEGIN_SRC vim', '#+END_SRC', 'vim', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC python', '#+END_SRC', 'python', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC c', '#+END_SRC', 'c', 'comment')
-  " cpp must be below c, otherwise you get c syntax hl for cpp files
-  call SyntaxRange#Include('#+BEGIN_SRC cpp', '#+END_SRC', 'cpp', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC haskell', '#+END_SRC', 'haskell', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC ocaml', '#+END_SRC', 'ocaml', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC ruby', '#+END_SRC', 'ruby', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC rust', '#+END_SRC', 'rust', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC lua', '#+END_SRC', 'lua', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC lisp', '#+END_SRC', 'lisp', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC html', '#+END_SRC', 'html', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC css', '#+END_SRC', 'css', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC java', '#+END_SRC', 'java', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC javascript', '#+END_SRC', 'javascript', 'comment')
-  call SyntaxRange#Include('#+BEGIN_SRC bash', '#+END_SRC', 'bash', 'comment')
+fun CallSyntaxRange()
+  " code
 
-  let g:org_latex_disabled     = get(g:, 'org_tex_disabled', 0)
+if exists('g:loaded_SyntaxRange')
+  call SyntaxRange#Include('#+BEGIN_SRC vim', '#+END_SRC', 'vim', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC python', '#+END_SRC', 'python', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC c', '#+END_SRC', 'c', 'comment containedin=ALL')
+  " cpp must be below c, otherwise you get c syntax hl for cpp files
+  call SyntaxRange#Include('#+BEGIN_SRC cpp', '#+END_SRC', 'cpp', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC haskell', '#+END_SRC', 'haskell', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC ocaml', '#+END_SRC', 'ocaml', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC ruby', '#+END_SRC', 'ruby', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC rust', '#+END_SRC', 'rust', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC lua', '#+END_SRC', 'lua', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC lisp', '#+END_SRC', 'lisp', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC html', '#+END_SRC', 'html', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC css', '#+END_SRC', 'css', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC java', '#+END_SRC', 'java', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC javascript', '#+END_SRC', 'javascript', 'comment containedin=ALL')
+  call SyntaxRange#Include('#+BEGIN_SRC bash', '#+END_SRC', 'bash', 'comment containedin=ALL')
+  call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex', 'comment')
+  call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex', 'comment')
+  call SyntaxRange#Include('\\(', '\\)', 'tex', 'comment')
+  call SyntaxRange#Include('\$[^$]', '\$', 'tex', 'comment')
+  " let g:org_latex_disabled     = get(g:, 'org_tex_disabled', 0)
   " LaTeX
-   if g:org_latex_disabled==0
-       call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex')
-       call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex')
-       call SyntaxRange#Include('\\\[', '\\\]', 'tex')
-       call SyntaxRange#Include('\$[^$]', '\$', 'tex')
-   endif
+  " if g:org_latex_disabled==0
+  " call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex', 'comment containedin=ALL')
+  " call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex', 'comment containedin=ALL')
+  " call SyntaxRange#Include('\\\[', '\\\]', 'tex', 'comment containedin=ALL')
+  " call SyntaxRange#Include('\\(', '\\)', 'tex', 'comment containedin=ALL')
+  " call SyntaxRange#Include('\$[^$]', '\$', 'tex', 'comment containedin=ALL')
+  " endif
 endif
+endf
+
+" autocmd FileType org call CallSyntaxRange()
+call CallSyntaxRange()
