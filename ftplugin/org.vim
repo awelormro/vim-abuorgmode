@@ -81,6 +81,30 @@ if ! exists('g:org_prefer_insert_mode') && ! exists('b:org_prefer_insert_mode')
     let g:org_prefer_insert_mode = 1
 endif
 
+function! s:NotCodeBlock(lnum) abort
+  return synIDattr(synID(a:lnum, 1, 1), 'name') !=# 'OrgCodeBlock'
+endfunction
+
+function! OrgFold() abort
+  let line = getline(v:lnum)
+
+  if line =~# '^\*\+ ' && s:NotCodeBlock(v:lnum)
+    return ">" . match(line, ' ')
+  endif
+
+  let nextline = getline(v:lnum + 1)
+  if (line =~ '^.\+$') && (nextline =~ '^=\+$') && s:NotCodeBlock(v:lnum + 1)
+    return ">1"
+  endif
+
+  if (line =~ '^.\+$') && (nextline =~ '^-\+$') && s:NotCodeBlock(v:lnum + 1)
+    return ">2"
+  endif
+
+  return "="
+endfunction
+
+
 " Menu and document handling {{{1
 function! <SID>OrgRegisterMenu()
 	exe s:py_version . 'ORGMODE.register_menu()'
@@ -188,3 +212,7 @@ fun CalendarAction(day, month, year, week, dir)
 	" restore calendar_action
 	let g:calendar_action = g:org_calendar_action_backup
 endf
+
+
+setlocal foldexpr=OrgFold()
+setlocal foldmethod=expr
