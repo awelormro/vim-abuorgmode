@@ -1,18 +1,8 @@
-" vim: set fdm=marker:
-"
 " Support org authoring markup as closely as possible
 " (we're adding two markdown-like variants for =code= and blockquotes)
 " -----------------------------------------------------------------------------
 "
 " Do we use aggresive conceal?
-
-if exists("b:current_syntax")
-  finish
-endif
-
-if !exists('main_syntax')
-  let main_syntax = 'org'
-endif
 if exists("b:org_aggressive_conceal")
     let s:conceal_aggressively=b:org_aggressive_conceal
 elseif exists("g:org_aggressive_conceal")
@@ -275,27 +265,6 @@ hi def link org_timestamp_inactive Comment
 syn match org_deadline_scheduled /^\s*\(DEADLINE\|SCHEDULED\):/
 hi def link org_deadline_scheduled PreProc
 
-" LaTeX syntax auxiliar {{{1
-
-" syn match texDelimiter		"&"
-" syn match texDelimiter		"\\\\"
-" syn match texDelimiter    "\\cite"
-" hi def link texDelimiter type
-
-" syn match  texBeginEnd		"\\begin\>\|\\end\>" nextgroup=texBeginEndName
-" syn region texBeginEndName		matchgroup=texDelimiter	start="{"		end="}"	contained	nextgroup=texBeginEndModifier	contains=texComment
-" syn region texBeginEndModifier	matchgroup=texDelimiter	start="\["		end="]"	contained	contains=texComment,@texMathZones,@NoSpell
-
-
-" Entorno de ecuaciones LaTeX con $$ delimitadores
-" syntax region orgLatexEquation start="\\v\%([^\\]\|^\)\@<=\$\$" end="\\v\%([^\\]\|^\)\@=\$\$"
-
-" Entorno de ecuaciones LaTeX con $ delimitadores
-" syntax region orgLatexInlineEquation start="\\v\%([^\\]\|^\)\@<=\$" end="\\v\%([^\\]\|^\)\@=\$"
-
-" syn match texStatement	"\\[a-zA-Z@]\+"
-" hi def link texStatement type
-" }}}
 " Tables: {{{1
 syn match org_table /^\s*|.*/ contains=org_timestamp,org_timestamp_inactive,hyperlink,org_table_separator,org_table_horizontal_line
 syn match org_table_separator /\(^\s*|[-+]\+|\?\||\)/ contained
@@ -344,8 +313,7 @@ hi def link org_list_unordered Identifier
 syntax match org_list_def /.*\s\+::/ contained
 hi def link org_list_def PreProc
 
-syntax match org_list_item /.*$/ contained contains=org_subtask_percent,org_subtask_number,org_subtask_percent_100,org_subtask_number_all,org_list_checkbox,org_bold,org_italic,org_underline,org_code,org_verbatim,org_timestamp,org_timestamp_inactive,org_list_def,
-" texDelimiter,orgLatexEquation,orgLatexInlineEquation,texStatement
+syntax match org_list_item /.*$/ contained contains=org_subtask_percent,org_subtask_number,org_subtask_percent_100,org_subtask_number_all,org_list_checkbox,org_bold,org_italic,org_underline,org_code,org_verbatim,org_timestamp,org_timestamp_inactive,org_list_def
 syntax match org_list_checkbox /\[[ X-]]/ contained
 hi def link org_list_bullet Identifier
 hi def link org_list_checkbox     PreProc
@@ -404,81 +372,24 @@ hi def link org_subtask_number_all Identifier
 " https://github.com/vim-scripts/SyntaxRange
 
 " BEGIN_SRC
-fun CallSyntaxRange()
+if exists('g:loaded_SyntaxRange')
+  call SyntaxRange#Include('#+BEGIN_SRC vim', '#+END_SRC', 'vim', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC python', '#+END_SRC', 'python', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC c', '#+END_SRC', 'c', 'comment')
+  " cpp must be below c, otherwise you get c syntax hl for cpp files
+  call SyntaxRange#Include('#+BEGIN_SRC cpp', '#+END_SRC', 'cpp', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC haskell', '#+END_SRC', 'haskell', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC ocaml', '#+END_SRC', 'ocaml', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC ruby', '#+END_SRC', 'ruby', 'comment')
+  call SyntaxRange#Include('#+BEGIN_SRC rust', '#+END_SRC', 'rust', 'comment')
+  " call SyntaxRange#Include('#+BEGIN_SRC lua', '#+END_SRC', 'lua', 'comment')
+  " call SyntaxRange#Include('#+BEGIN_SRC lisp', '#+END_SRC', 'lisp', 'comment')
 
-  if exists('g:loaded_SyntaxRange')
-    call SyntaxRange#Include('#+BEGIN_SRC vim', '#+END_SRC', 'vim', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC python', '#+END_SRC', 'python', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC c', '#+END_SRC', 'c', 'comment containedin=ALL')
-    " cpp must be below c, otherwise you get c syntax hl for cpp files
-    call SyntaxRange#Include('#+BEGIN_SRC cpp', '#+END_SRC', 'cpp', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC haskell', '#+END_SRC', 'haskell', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC ocaml', '#+END_SRC', 'ocaml', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC ruby', '#+END_SRC', 'ruby', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC rust', '#+END_SRC', 'rust', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC lua', '#+END_SRC', 'lua', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC lisp', '#+END_SRC', 'lisp', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC html', '#+END_SRC', 'html', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC css', '#+END_SRC', 'css', 'comment containedin=ALL')
-	call SyntaxRange#Include('#+BEGIN_SRC java', '#+END_SRC', 'java', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC javascript', '#+END_SRC', 'javascript', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC bash', '#+END_SRC', 'bash', 'comment containedin=ALL')
-    call SyntaxRange#Include('#+BEGIN_SRC graphviz', '#+END_SRC', 'dot', 'comment containedin=ALL')
-    "call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex', 'comment')
-    "call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex', 'comment')
-    "call SyntaxRange#Include('\\(', '\\)', 'tex',)
-    "call SyntaxRange#Include('\$[^$]', '\$', 'pandoc')
-    " let g:org_latex_disabled     = get(g:, 'org_tex_disabled', 0)
-    " LaTeX
-    " if g:org_latex_disabled==0
   " LaTeX
-  " call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex')
-  " call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex')
-  " call SyntaxRange#Include('\\\[', '\\\]', 'tex')
-  " call SyntaxRange#Include('\\(', '\\)', 'tex')
-  " call SyntaxRange#Include('\$[^$]', '\$', 'tex')
-    " endif
-    "
-  " call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'pandoc')
-  " call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'pandoc')
-  " call SyntaxRange#Include('\\\[', '\\\]', 'pandoc')
-  " call SyntaxRange#Include('\\(', '\\)', 'pandoc')
-  "call SyntaxRange#Include('\$[^$]', '\$', 'pandoc')
-  endif
-endf
-
-" LaTeX: {{{1
-" Set embedded LaTex (pandoc extension) highlighting
-" Unset current_syntax so the 2nd include will work
-unlet b:current_syntax
-syn include @LATEX syntax/tex.vim
-" if index(g:pandoc#syntax#conceal#blacklist, 'inlinemath') == -1
-    " Can't use WithConceal here because it will mess up all other conceals
-    " when dollar signs are used normally. It must be skipped entirely if
-    " inlinemath is blacklisted
-    syn region pandocLaTeXInlineMath start=/\v\\@<!\$\S@=/ end=/\v\\@<!\$\d@!/ keepend contains=@LATEX containedin=ALL
-    syn region pandocLaTeXInlineMath start=/\\\@<!\\(/ end=/\\\@<!\\)/ keepend contains=@LATEX containedin=ALL
-" endif
-syn match pandocEscapedDollar /\\\$/ conceal cchar=$
-syn match pandocProtectedFromInlineLaTeX /\\\@<!\${.*}\(\(\s\|[[:punct:]]\)\([^$]*\|.*\(\\\$.*\)\{2}\)\n\n\|$\)\@=/ display
-" contains=@LATEX
-syn region pandocLaTeXMathBlock start=/\$\$/ end=/\$\$/ keepend contains=@LATEX
-syn region pandocLaTeXMathBlock start=/\\\@<!\\\[/ end=/\\\@<!\\\]/ keepend contains=@LATEX
-syn match pandocLaTeXCommand /\\[[:alpha:]]\+\(\({.\{-}}\)\=\(\[.\{-}\]\)\=\)*/ contains=@LATEX
-syn region pandocLaTeXRegion start=/\\begin{\z(.\{-}\)}/ end=/\\end{\z1}/ keepend contains=@LATEX
-" we rehighlight sectioning commands, because otherwise tex.vim captures all text until EOF or a new sectioning command
-syn region pandocLaTexSection start=/\\\(part\|chapter\|\(sub\)\{,2}section\|\(sub\)\=paragraph\)\*\=\(\[.*\]\)\={/ end=/\}/ keepend
-syn match pandocLaTexSectionCmd /\\\(part\|chapter\|\(sub\)\{,2}section\|\(sub\)\=paragraph\)/ contained containedin=pandocLaTexSection
-syn match pandocLaTeXDelimiter /[[\]{}]/ contained containedin=pandocLaTexSection
-" }}}3
-"autocmd BufEnter *.org call CallSyntaxRange()
-call CallSyntaxRange()
-" syntax sync clear
-
-let b:current_syntax = "org"
-if main_syntax ==# 'org'
-  unlet main_syntax
+  call SyntaxRange#Include('\\begin[.*]{.*}', '\\end{.*}', 'tex')
+  call SyntaxRange#Include('\\begin{.*}', '\\end{.*}', 'tex')
+  call SyntaxRange#Include('\\\[', '\\\]', 'tex')
+  call SyntaxRange#Include('\$[^$]', '\$', 'tex')
 endif
 
-syntax sync minlines=400
-" vim:set sw=2:
+" vi: ft=vim:tw=80:sw=4:ts=4:fdm=marker

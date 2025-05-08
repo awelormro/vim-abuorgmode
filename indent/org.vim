@@ -1,60 +1,85 @@
-" vim: set fdm=marker:
-" org.vim - VimOrganizer plugin for Vim
-" -------------------------------------------------------------
-" Version: 0.30
-" Maintainer: Herbert Sitz <hesitz@gmail.com>
-" Last Change: 2011 Nov 02
-"
-" Script: http://www.vim.org/scripts/script.php?script_id=3342
-" Github page: http://github.com/hsitz/VimOrganizer 
-" Copyright: (c) 2010, 2011 by Herbert Sitz
-" The VIM LICENSE applies to all files in the
-" VimOrganizer plugin.  
-" (See the Vim copyright except read "VimOrganizer"
-" in places where that copyright refers to "Vim".)
-" http://vimdoc.sourceforge.net/htmldoc/uganda.html#license
-" No warranty, express or implied.
-" *** *** Use At-Your-Own-Risk *** ***
+vim9script
 
-" set indent of text lines beyond heading's left column
-" 0 -- have text lines flush with their heading's left col
-"
+# Vim indent plugin file
+# Language: Odin
+# Maintainer: Maxim Kim <habamax@gmail.com>
+# Website: https://github.com/habamax/vim-odin
+# Last Change: 2024-01-15
 
-" Only load this indent file when no other was loaded. {{{1
 if exists("b:did_indent")
-  finish
+    finish
 endif
-let b:did_indent = 1
+b:did_indent = 1
 
-" Some preliminary settings {{{1
-setlocal nolisp		" Make sure lisp indenting doesn't supersede us
-setlocal autoindent	" indentexpr isn't much help otherwise
+b:undo_indent = 'setlocal autoindent< indentexpr<'
 
+setlocal autoindent
+setlocal nosmartindent
+# setlocal cindent
+# setlocal cinoptions=L0,m1,(s,j1,J1,l1,+0,:0,#3
+# setlocal cinkeys=0-,0},0),0],!^F,:,o,O
 
-setlocal indentexpr=GetOrgIndent(...)
-setlocal indentkeys+=<:>,=elif,=except,o,O,*<Return>
+setlocal indentexpr=GetOrgIndent(v:lnum)
 
-let b:undo_indent = "setl ai< inde< indk< lisp<"
+def PrevLine(lnum: number): number
+    var plnum = lnum - 1
+    var pline: string
+    while plnum > 1
+        plnum = prevnonblank(plnum)
+        pline = getline(plnum)
+        # XXX: take into account nested multiline /* /* */ */ comments
+        if pline =~ '\*/\s*$'
+            while getline(plnum) !~ '/\*' && plnum > 1
+                plnum -= 1
+            endwhile
+            if getline(plnum) =~ '^\s*/\*'
+                plnum -= 1
+            else
+                break
+            endif
+        elseif pline =~ '^\s*//'
+            plnum -= 1
+        else
+            break
+        endif
+    endwhile
+    return plnum
+enddef
 
-" Only define the function once.
-
-" Main fold function {{{1
-function GetOrgIndent(...)
-  let prevline=line(v:lnum)-1
-  let prevlinec=getline(prevline)
-  if prevlinec=~'^\*\+'
-    echo prevline
-    let astercount=len(matchstr(getline('.'), '^\*\+'))+1
-    execute 'normal '.astercount.'i '
-    let python#GetIndent=astercount
-    return astercount
-  else
-    return 10
-    echo prevline
+def GetOrgIndent(lnum: number): number
+  var ind: number = lnum
+  var plnum: number = prevnonblank(lnum - 1)
+  var pline: string = getline(lnum - 1)
+  var pind: number = indent(plnum)
+  var level: number = pind
+  if pline =~ '^\s*- \['
+    return level + 6
+  # elseif pline =~ '^\s*- ' || pline =~ '^\s*+ ' || pline =~ '^\s*\* '
+  elseif pline =~ '^\s*[+-\*] '
+    return level + 2
+  # TODO: Add conditional for count decimals and adjust level
+  elseif pline =~ '^\s*\d[\.\)] '
+    return level + 3
+  elseif pline =~ '^\s*[0-9i]\{2}[\.\)] '
+    return level + 4
+  elseif pline =~ '^\s*\d\d\d[\.\)] '
+    return level + 5
+  elseif pline =~ '^\s*\a[\.)] '
+    return level + 3
+  elseif pline =~ '^\* '
+    return level + 2
+  elseif pline =~ '^\*\* '
+    return level + 3
+  elseif pline =~ '^\*\*\* '
+    return level + 4
+  elseif pline =~ '^\*\*\*\* '
+    return level + 5
+  elseif pline =~ '^\*\*\*\*\* '
+    return level + 6
+  elseif pline =~ '^\*\*\*\*\*\* '
+    return level + 7
+  # else
   endif
-endfunction
+  return level
+enddef
 
-
-
-
-" vim:sw=2

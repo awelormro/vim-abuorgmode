@@ -1,15 +1,10 @@
-" vim: set fdm=marker:
-" echo 1
-let b:current_syntax='org'
-" setlocal commentstring="/*#%s*"
+" call 
 
-setlocal comments=fb:*,b:#,fb:-
-setlocal commentstring=#\ %s
-" Fold method plugin {{{1
 function! s:NotCodeBlock(lnum) abort
   return synIDattr(synID(a:lnum, 1, 1), 'name') !=# 'OrgCodeBlock'
 endfunction
-function! OrgFold() abort
+
+function! OrgFolding() abort
   let line = getline(v:lnum)
 
   if line =~# '^\*\+ ' && s:NotCodeBlock(v:lnum)
@@ -28,7 +23,9 @@ function! OrgFold() abort
   return "="
 endfunction
 
-setlocal tw=75
-" setlocal foldexpr=OrgFold()
-" setlocal foldmethod=expr
-" vim9cmd 'import orgnormal.vim'
+" setlocal foldexpr=OrgFolding()
+" syntax clear
+" syntax off
+" syntax on 
+" syntax enable
+" call CallSyntaxRange()
